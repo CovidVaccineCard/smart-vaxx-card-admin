@@ -1,17 +1,23 @@
-import React, { Suspense } from "react";
-import { Route, Router, Switch } from "react-router-dom";
-import { history } from "./history";
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
+import Login from "./login";
+import Dashboard from "./dashboard";
 
 function Routes() {
   return (
-    <Router history={history}>
-      <Suspense fallback={<h3>Lodaing...</h3>}>
-        <Switch>
-          <Route exact path={"/"}>
-            <h3>hello</h3>
-          </Route>
-        </Switch>
-      </Suspense>
+    <Router>
+      <Switch>
+        <Route exact path={"/"}>
+          <Login />
+        </Route>
+        <Route path={"/dashboard"}>
+          <Dashboard />
+        </Route>
+        <Route>
+          <>404</>
+        </Route>
+      </Switch>
     </Router>
   );
 }

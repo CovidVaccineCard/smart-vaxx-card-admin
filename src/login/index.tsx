@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useFirebaseApp } from "reactfire";
+import "firebase/auth";
 
 import { Button, TextField } from "@material-ui/core";
 
@@ -8,6 +10,8 @@ import * as Styles from "./styles";
 import { withRouter } from "react-router-dom";
 
 function Login(props: any) {
+  const firebase = useFirebaseApp();
+
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
   const [validated, setValidated] = useState(false);
@@ -18,9 +22,20 @@ function Login(props: any) {
 
   const emailIdHandler = (e: any) => setEmailId(e.target.value);
   const passwordHandler = (e: any) => setPassword(e.target.value);
-  const loginHandler = () => {
-    console.log("login success");
-    props.history.push("/dashboard");
+  const loginHandler = async () => {
+    try {
+      const result = await firebase
+        .auth()
+        .signInWithEmailAndPassword(emailId, password);
+      if (result) {
+        console.log("login success");
+        props.history.push("/dashboard");
+      } else {
+        console.log("login failed");
+      }
+    } catch (e: any) {
+      console.log(e);
+    }
   };
 
   return (

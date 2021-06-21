@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
+import { useFirebaseApp } from "reactfire";
+import "firebase/auth";
 
 import { Button, IconButton, Modal, TextField } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -11,17 +13,25 @@ import { useStyles } from "./styles";
 import { centerList } from "../centerList";
 
 function Dashboard(props: any) {
+  const firebase = useFirebaseApp();
   const classes = useStyles();
 
   const [name, setName] = useState("");
   const [location, setLocation] = useState({ latitude: "", longitude: "" });
   const [add, setAdd] = useState(false);
   const [edit, setEdit] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [id, setId] = useState("");
 
   const logoutHandler = () => {
-    console.log("logout success");
-    props.history.push("/");
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        console.log("logout success");
+        props.history.push("/");
+      })
+      .catch(console.log);
   };
   const nameHandler = (e: any) => setName(e.target.value);
   const latitudeHandler = (e: any) => {

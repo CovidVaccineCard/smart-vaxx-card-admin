@@ -11,12 +11,11 @@ import AddIcon from "@material-ui/icons/Add";
 import CenterModal from "./components/modal";
 
 import * as Styles from "./styles";
-import { useStyles } from "./styles";
 
 function Dashboard(props: any) {
   const db = useFirestore();
   const auth = useAuth();
-  const classes = useStyles();
+  const classes = Styles.useStyles();
 
   const [center, setCenter] = useState({
     id: "",
@@ -42,6 +41,7 @@ function Dashboard(props: any) {
       return data;
     };
     return fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const logoutHandler = () => {

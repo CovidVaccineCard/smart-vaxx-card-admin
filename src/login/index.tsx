@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { Redirect, withRouter } from "react-router-dom";
 import { useAuth, useSigninCheck } from "reactfire";
 import "firebase/auth";
 
-import { Button, TextField } from "@material-ui/core";
+import { Button, TextField, Paper } from "@material-ui/core";
 
 import { loginValidation } from "./validate";
 
 import * as Styles from "./styles";
-import { Redirect, withRouter } from "react-router-dom";
+import image from "../frontImage.png";
 
 function Login(props: any) {
   const auth = useAuth();
   const { status, data: result } = useSigninCheck();
+  const classes = Styles.useStyles();
 
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
@@ -44,7 +46,44 @@ function Login(props: any) {
   }
 
   return (
-    <Styles.Wrapper>
+    <Styles.FlexWrapper>
+      <Styles.Image src={image} alt={"woman wearing mask"} />
+      <Styles.FlexComponent>
+        <Paper elevation={3} className={classes.paper}>
+          <Styles.Title>Hey admin, signin here...</Styles.Title>
+          <TextField
+            className={classes.input}
+            value={emailId}
+            onChange={emailIdHandler}
+            label="Email Id"
+            type="text"
+            spellCheck={false}
+          />
+          <TextField
+            className={classes.input}
+            value={password}
+            onChange={passwordHandler}
+            label="Password"
+            type="password"
+            spellCheck={false}
+          />
+          <Button
+            className={classes.button}
+            variant="contained"
+            disabled={!validated}
+            onClick={loginHandler}
+          >
+            LOGIN
+          </Button>
+        </Paper>
+      </Styles.FlexComponent>
+    </Styles.FlexWrapper>
+  );
+}
+
+export default withRouter(Login);
+/*
+<Styles.Wrapper>
       <TextField
         value={emailId}
         onChange={emailIdHandler}
@@ -68,7 +107,4 @@ function Login(props: any) {
         LOGIN
       </Button>
     </Styles.Wrapper>
-  );
-}
-
-export default withRouter(Login);
+*/

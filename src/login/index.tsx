@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useFirebaseApp } from "reactfire";
+import { useAuth, useSigninCheck } from "reactfire";
 import "firebase/auth";
 
 import { Button, TextField } from "@material-ui/core";
@@ -7,10 +7,11 @@ import { Button, TextField } from "@material-ui/core";
 import { loginValidation } from "./validate";
 
 import * as Styles from "./styles";
-import { withRouter } from "react-router-dom";
+import { Redirect, withRouter } from "react-router-dom";
 
 function Login(props: any) {
-  const firebase = useFirebaseApp();
+  const auth = useAuth();
+  const { status, data: result } = useSigninCheck();
 
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
@@ -24,19 +25,23 @@ function Login(props: any) {
   const passwordHandler = (e: any) => setPassword(e.target.value);
   const loginHandler = async () => {
     try {
-      const result = await firebase
-        .auth()
-        .signInWithEmailAndPassword(emailId, password);
+      const result = await auth.signInWithEmailAndPassword(emailId, password);
       if (result) {
-        console.log("login success");
         props.history.push("/dashboard");
       } else {
-        console.log("login failed");
+        //login failed
       }
-    } catch (e: any) {
+    } catch (e) {
       console.log(e);
     }
   };
+
+  if (status === "loading") {
+    return <div>Loading</div>;
+  }
+  if (result.signedIn) {
+    return <Redirect to="/dashboard" />;
+  }
 
   return (
     <Styles.Wrapper>

@@ -7,15 +7,17 @@ import reportWebVitals from "./reportWebVitals";
 import * as firebase from "firebase";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAxZH7tFy0VBkmJgDLIpgbqa350yt5UDKk",
-  authDomain: "smart-vaxx-card-test.firebaseapp.com",
-  projectId: "smart-vaxx-card-test",
-  storageBucket: "smart-vaxx-card-test.appspot.com",
-  messagingSenderId: "303100902004",
-  appId: "1:303100902004:web:ef12af68d146105ef0af21",
+  apiKey: "AIzaSyB5BzruiXxW_L_AMhVa1UFYIka1zrHQwPI",
+  authDomain: "smart-vaxx-card.firebaseapp.com",
+  projectId: "smart-vaxx-card",
+  storageBucket: "smart-vaxx-card.appspot.com",
+  messagingSenderId: "422616208444",
+  appId: "1:422616208444:web:6e63fb3792edead6671f39",
+  measurementId: "G-JG4JEM1LEH",
 };
 
-firebase.default.initializeApp({ firebaseConfig }, "test");
+const firebaseApp = firebase.default.initializeApp(firebaseConfig);
+export const db = firebaseApp.firestore();
 
 ReactDOM.render(
   <React.StrictMode>
@@ -30,5 +32,3 @@ ReactDOM.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
-
-export default firebase;

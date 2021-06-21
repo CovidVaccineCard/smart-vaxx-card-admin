@@ -23,14 +23,9 @@ export const ComponentsWrapper = styled.div`
   padding: 20px;
 `;
 
-export const RowWrapper = styled.div<{
-  justify?: boolean;
-  gap?: boolean;
-}>`
+export const RowWrapper = styled.div<{}>`
   display: flex;
   align-items: center;
-  ${(p) => p.justify && `justify-content: space-between;`}
-  ${(p) => p.gap && `gap: 5px;`}
 `;
 
 export const Spacer = styled.div`
@@ -38,10 +33,8 @@ export const Spacer = styled.div`
   flex: 1;
 `;
 
-export const Text = styled.div<{
-  size?: string;
-}>`
-  font-size: ${(p) => p.size || "16px"};
+export const Text = styled.div<{}>`
+  font-size: 16px;
 `;
 
 export const useStyles = makeStyles({

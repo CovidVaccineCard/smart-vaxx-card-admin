@@ -1,54 +1,97 @@
-import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
-import { useFirebaseApp } from "reactfire";
+import React, { useState, useEffect } from "react";
+import { Redirect, withRouter } from "react-router-dom";
+import { useAuth, useFirestore, useSigninCheck } from "reactfire";
 import "firebase/auth";
+import "firebase/firestore";
 
-import { Button, IconButton, Modal, TextField } from "@material-ui/core";
+import { Button, IconButton } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
+import CenterModal from "./components/modal";
 
 import * as Styles from "./styles";
 import { useStyles } from "./styles";
-import { centerList } from "../centerList";
 
 function Dashboard(props: any) {
-  const firebase = useFirebaseApp();
+  const db = useFirestore();
+  const auth = useAuth();
   const classes = useStyles();
 
-  const [name, setName] = useState("");
-  const [location, setLocation] = useState({ latitude: "", longitude: "" });
+  const [center, setCenter] = useState({
+    id: "",
+    name: "",
+    place: "",
+    location: null,
+  });
   const [add, setAdd] = useState(false);
   const [edit, setEdit] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [id, setId] = useState("");
+  const [centerData, setCenterData] = useState<any[]>([]);
+  const { status, data: result } = useSigninCheck();
+
+  useEffect(() => {
+    const fetchData = () => {
+      const data = db.collection("centers").onSnapshot(
+        (ds) => {
+          setCenterData(ds.docs.map((doc) => doc.data()));
+        },
+        (e) => {
+          console.log(e);
+        }
+      );
+      return data;
+    };
+    return fetchData();
+  }, []);
 
   const logoutHandler = () => {
-    firebase
-      .auth()
+    auth
       .signOut()
       .then(() => {
-        console.log("logout success");
         props.history.push("/");
       })
       .catch(console.log);
   };
-  const nameHandler = (e: any) => setName(e.target.value);
-  const latitudeHandler = (e: any) => {
-    setLocation({ ...location, latitude: e.target.value });
+
+  const clearDetails = () => {
+    setCenter({
+      id: "",
+      name: "",
+      place: "",
+      location: null,
+    });
   };
-  const longitudeHandler = (e: any) => {
-    setLocation({ ...location, longitude: e.target.value });
+
+  const addHandler = async (det: any) => {
+    const docRef = db.collection("centers").doc();
+    const location = det.location;
+    docRef.set({
+      id: docRef.id,
+      name: det.name,
+      place: det.place,
+      location,
+    });
   };
-  const addHandler = () => {
-    console.log("add");
-  };
-  const editHandler = () => {
-    console.log("edit");
+  const editHandler = (det: any) => {
+    const docRef = db.collection("centers").doc(det.id);
+    const location = det.location;
+    docRef.update({
+      id: docRef.id,
+      name: det.name,
+      place: det.place,
+      location,
+    });
   };
   const deleteHandler = (id: string) => {
-    setId(id);
+    db.collection("centers").doc(id).delete();
   };
+
+  if (status === "loading") {
+    return <div>Loading</div>;
+  }
+  if (!result.signedIn) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <Styles.Wrapper>
@@ -60,20 +103,25 @@ function Dashboard(props: any) {
         </Button>
       </Styles.HeadWrapper>
       <Styles.ComponentsWrapper>
-        <Styles.RowWrapper gap={true}>
-          <Styles.Text size={"18px"}>Covid Vaccine Centers</Styles.Text>
-          <IconButton onClick={() => setAdd(true)}>
+        <Styles.RowWrapper>
+          <Styles.Text>Covid Vaccine Centers</Styles.Text>
+          <IconButton
+            onClick={() => {
+              clearDetails();
+              setAdd(true);
+            }}
+          >
             <AddIcon />
           </IconButton>
         </Styles.RowWrapper>
         <div className={classes.list}>
-          {centerList.map((c) => (
-            <Styles.RowWrapper key={c.id} justify={true}>
+          {centerData.map((c) => (
+            <Styles.RowWrapper key={c.id}>
               <Styles.Text>{c.name}</Styles.Text>
-              <Styles.RowWrapper justify={true}>
+              <Styles.RowWrapper>
                 <IconButton
                   onClick={() => {
-                    setId(c.id);
+                    setCenter(c);
                     setEdit(true);
                   }}
                 >
@@ -86,64 +134,23 @@ function Dashboard(props: any) {
             </Styles.RowWrapper>
           ))}
         </div>
-        <Modal
-          open={add || edit}
-          onClose={() => {
-            add ? setAdd(false) : setEdit(false);
-          }}
-          className={classes.modal}
-        >
-          <div className={classes.paper}>
-            <Styles.Text size={"23px"}>Enter Center Details</Styles.Text>
-            <TextField
-              label="Center Name"
-              value={name}
-              onChange={nameHandler}
-              variant="outlined"
-              size="small"
-            />
-            <TextField
-              label="Latitude"
-              value={location.latitude}
-              onChange={latitudeHandler}
-              variant="outlined"
-              size="small"
-            />
-            <TextField
-              label="Longitude"
-              value={location.longitude}
-              onChange={longitudeHandler}
-              variant="outlined"
-              size="small"
-            />
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => (add ? addHandler : editHandler)}
-            >
-              {add ? "ADD CENTER" : "UPDATE CENTER"}
-            </Button>
-          </div>
-        </Modal>
+        <CenterModal
+          show={add}
+          action={"add"}
+          centerData={center}
+          centerHandler={(details) => addHandler(details)}
+          closeHandler={() => setAdd(false)}
+        />
+        <CenterModal
+          show={edit}
+          action={"edit"}
+          centerData={center}
+          centerHandler={(details) => editHandler(details)}
+          closeHandler={() => setEdit(false)}
+        />
       </Styles.ComponentsWrapper>
     </Styles.Wrapper>
   );
 }
 
 export default withRouter(Dashboard);
-
-/*
-(
-                <ListItem>
-                  <ListItemText
-                    primary="Single-line item"
-                    secondary={secondary ? 'Secondary text' : null}
-                  />
-                  <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="delete">
-                      <DeleteIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>,
-              )
-*/

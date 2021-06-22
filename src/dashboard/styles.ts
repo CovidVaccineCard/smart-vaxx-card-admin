@@ -81,4 +81,10 @@ export const useStyles = makeStyles({
     flexDirection: "column",
     overflowY: "auto",
   },
+  icon: {
+    color: "#fff",
+    "& svg": {
+      color: "#fff",
+    },
+  },
 });

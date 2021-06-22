@@ -81,7 +81,7 @@ function CenterModal(props: IModalProps) {
   return (
     <Modal open={show} onClose={onCloseHandler} className={classes.modal}>
       <div className={classes.paper}>
-        <Styles.Text>Enter Center Details</Styles.Text>
+        <Styles.Text color={"#000"}>Enter Center Details</Styles.Text>
         <TextField
           label="Center Name"
           value={center.name}

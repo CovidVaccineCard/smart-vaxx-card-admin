@@ -108,12 +108,13 @@ function Dashboard(props: any) {
             Covid Vaccine Centers
           </Styles.Text>
           <IconButton
+            className={classes.icon}
             onClick={() => {
               clearDetails();
               setAdd(true);
             }}
           >
-            <AddIcon />
+            <AddIcon className={classes.icon} />
           </IconButton>
         </Styles.RowWrapper>
         <CenterList

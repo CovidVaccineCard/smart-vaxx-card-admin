@@ -5,10 +5,10 @@ import "firebase/auth";
 import "firebase/firestore";
 
 import { Button, IconButton } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
+import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
 import AddIcon from "@material-ui/icons/Add";
 import CenterModal from "./components/modal";
+import CenterList from "./components/centerList";
 
 import * as Styles from "./styles";
 
@@ -96,15 +96,17 @@ function Dashboard(props: any) {
   return (
     <Styles.Wrapper>
       <Styles.HeadWrapper>
-        <Styles.Text>Smart Vaxx Card</Styles.Text>
+        <Styles.Text color={"cornsilk"}>SMART VAXX CARD</Styles.Text>
         <Styles.Spacer />
-        <Button variant="contained" color="secondary" onClick={logoutHandler}>
-          LOGOUT
-        </Button>
+        <IconButton className={classes.button} onClick={logoutHandler}>
+          <ExitToAppRoundedIcon color="inherit" />
+        </IconButton>
       </Styles.HeadWrapper>
       <Styles.ComponentsWrapper>
         <Styles.RowWrapper>
-          <Styles.Text>Covid Vaccine Centers</Styles.Text>
+          <Styles.Text padding={"10px 0 20px"}>
+            Covid Vaccine Centers
+          </Styles.Text>
           <IconButton
             onClick={() => {
               clearDetails();
@@ -114,26 +116,14 @@ function Dashboard(props: any) {
             <AddIcon />
           </IconButton>
         </Styles.RowWrapper>
-        <div className={classes.list}>
-          {centerData.map((c) => (
-            <Styles.RowWrapper key={c.id}>
-              <Styles.Text>{c.name}</Styles.Text>
-              <Styles.RowWrapper>
-                <IconButton
-                  onClick={() => {
-                    setCenter(c);
-                    setEdit(true);
-                  }}
-                >
-                  <EditIcon />
-                </IconButton>
-                <IconButton onClick={() => deleteHandler(c.id)}>
-                  <DeleteIcon />
-                </IconButton>
-              </Styles.RowWrapper>
-            </Styles.RowWrapper>
-          ))}
-        </div>
+        <CenterList
+          list={centerData}
+          editHandler={(data: any) => {
+            setCenter(data);
+            setEdit(true);
+          }}
+          deleteHandler={(id: string) => deleteHandler(id)}
+        />
         <CenterModal
           show={add}
           action={"add"}
@@ -154,3 +144,7 @@ function Dashboard(props: any) {
 }
 
 export default withRouter(Dashboard);
+/* 
+setCenter(c);
+                    setEdit(true);
+*/

@@ -10,9 +10,9 @@ export const Wrapper = styled.div`
 
 export const HeadWrapper = styled.div`
   display: flex;
-  padding: 15px;
   align-items: center;
-  border: 1px solid;
+  padding: 20px 20px 20px 40px;
+  background: #567086;
 `;
 
 export const ComponentsWrapper = styled.div`
@@ -20,7 +20,8 @@ export const ComponentsWrapper = styled.div`
   flex-direction: column;
   height: calc(100% - 68px);
   overflow-y: auto;
-  padding: 20px;
+  padding: 20px 20px 20px 35px;
+  background: #4e657a;
 `;
 
 export const RowWrapper = styled.div<{}>`
@@ -33,8 +34,16 @@ export const Spacer = styled.div`
   flex: 1;
 `;
 
-export const Text = styled.div<{}>`
-  font-size: 16px;
+export const Text = styled.div<{
+  color?: string;
+  padding?: string;
+}>`
+  font-size: 26px;
+  font-family: revert;
+  font-weight: 500;
+  color: ${(p) => p.color || "#fff"};
+  margin-right: 10px;
+  ${(p) => p.padding && `padding: ${p.padding};`}
 `;
 
 export const useStyles = makeStyles({
@@ -53,6 +62,19 @@ export const useStyles = makeStyles({
     width: "300px",
     height: "350px",
     justifyContent: "space-around",
+  },
+  button: {
+    height: 70,
+    width: 70,
+    color: "#fff",
+    "& svg": {
+      height: 35,
+      width: 35,
+    },
+  },
+  modalButton: {
+    backgroundColor: "#2b6a96",
+    color: "#fff",
   },
   list: {
     display: "flex",

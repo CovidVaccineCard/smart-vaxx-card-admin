@@ -16,8 +16,8 @@ function CenterModal(props: IModalProps) {
     id: string;
     name: string;
     place: string;
-    latitude?: number;
-    longitude?: number;
+    latitude?: string;
+    longitude?: string;
   }>({ id: "", name: "", place: "" });
   const [validated, setValidated] = useState(false);
 
@@ -26,8 +26,8 @@ function CenterModal(props: IModalProps) {
       id: centerData.id,
       name: centerData.name,
       place: centerData.place,
-      latitude: centerData.location?.latitude || undefined,
-      longitude: centerData.location?.longitude || undefined,
+      latitude: `${centerData.location?.latitude ?? ""}` || undefined,
+      longitude: `${centerData.location?.longitude ?? ""}` || undefined,
     });
   }, [centerData]);
 
@@ -35,8 +35,8 @@ function CenterModal(props: IModalProps) {
     setValidated(
       center.name !== "" &&
         center.place !== "" &&
-        !isNaN(center.latitude || +"") &&
-        !isNaN(center.longitude || +"")
+        !!center.latitude &&
+        !!center.longitude
     );
   }, [center]);
 
@@ -56,8 +56,8 @@ function CenterModal(props: IModalProps) {
         name: center.name,
         place: center.place,
         location: new firebase.firestore.GeoPoint(
-          center.latitude,
-          center.longitude
+          +center.latitude,
+          +center.longitude
         ),
       });
     }
@@ -74,9 +74,9 @@ function CenterModal(props: IModalProps) {
   const placeHandler = (e: any) =>
     setCenter({ ...center, place: e.target.value });
   const latitudeHandler = (e: any) =>
-    setCenter({ ...center, latitude: +e.target.value });
+    setCenter({ ...center, latitude: e.target.value });
   const longitudeHandler = (e: any) =>
-    setCenter({ ...center, longitude: +e.target.value });
+    setCenter({ ...center, longitude: e.target.value });
 
   return (
     <Modal open={show} onClose={onCloseHandler} className={classes.modal}>
@@ -98,21 +98,21 @@ function CenterModal(props: IModalProps) {
         />
         <TextField
           label="Latitude"
-          value={center.latitude || 0}
+          value={center.latitude ?? ""}
           onChange={latitudeHandler}
           variant="outlined"
           size="small"
         />
         <TextField
           label="Longitude"
-          value={center.longitude || 0}
+          value={center.longitude ?? ""}
           onChange={longitudeHandler}
           variant="outlined"
           size="small"
         />
         <Button
           variant="contained"
-          color="secondary"
+          className={classes.modalButton}
           onClick={submitHandler}
           disabled={!validated}
         >

@@ -11,7 +11,7 @@ export const FlexComponent = styled.div`
   height: 100%;
   flex: 1;
   width: calc(100% - 503px);
-  background: #0f4356;
+  background: #4e657a;
   align-items: center;
   justify-content: center;
 `;
@@ -53,8 +53,9 @@ export const useStyles = makeStyles({
     },
   },
   button: {
-    backgroundColor: "#1facbf",
+    backgroundColor: "#1a3c5a",
     width: "100px",
     height: "40px",
+    color: "#fff",
   },
 });

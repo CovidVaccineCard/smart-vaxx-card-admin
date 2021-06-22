@@ -4,7 +4,7 @@ import { useAuth, useFirestore, useSigninCheck } from "reactfire";
 import "firebase/auth";
 import "firebase/firestore";
 
-import { Button, IconButton } from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
 import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
 import AddIcon from "@material-ui/icons/Add";
 import CenterModal from "./components/modal";

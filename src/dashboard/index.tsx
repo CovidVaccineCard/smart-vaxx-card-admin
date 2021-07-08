@@ -11,17 +11,18 @@ import CenterModal from "./components/modal";
 import CenterList from "./components/centerList";
 
 import * as Styles from "./styles";
+import { useRef } from "react";
 
 function Dashboard(props: any) {
   const db = useFirestore();
   const auth = useAuth();
   const classes = Styles.useStyles();
+  const countryRef = useRef("in");
 
   const [center, setCenter] = useState({
     id: "",
     name: "",
     place: "",
-    country: "",
     location: null,
   });
   const [add, setAdd] = useState(false);
@@ -30,20 +31,34 @@ function Dashboard(props: any) {
   const { status, data: result } = useSigninCheck();
 
   useEffect(() => {
-    const fetchData = () => {
-      const data = db.collection("centers").onSnapshot(
-        (ds) => {
-          setCenterData(ds.docs.map((doc) => doc.data()));
-        },
-        (e) => {
-          console.log(e);
-        }
-      );
-      return data;
+    const fetchData = async () => {
+      const user = await db
+        .collection("users")
+        .doc(auth.currentUser?.uid)
+        .get();
+      console.log(user.data());
+      countryRef.current = user.data()?.["country"] ?? "in";
+      if (user.exists) {
+        const data = db
+          .collection("centers")
+          .where("country", "==", user.data()?.["country"] ?? "in")
+          .onSnapshot(
+            (ds) => {
+              setCenterData(ds.docs.map((doc) => doc.data()));
+            },
+            (e) => {
+              console.log(e);
+            }
+          );
+        return data;
+      }
     };
-    return fetchData();
+
+    if (status === "success") {
+      fetchData();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [status]);
 
   const logoutHandler = () => {
     auth
@@ -59,7 +74,6 @@ function Dashboard(props: any) {
       id: "",
       name: "",
       place: "",
-      country: "",
       location: null,
     });
   };
@@ -71,7 +85,7 @@ function Dashboard(props: any) {
       id: docRef.id,
       name: det.name,
       place: det.place,
-      country: det.country,
+      country: countryRef.current,
       location,
     });
   };
@@ -82,7 +96,7 @@ function Dashboard(props: any) {
       id: docRef.id,
       name: det.name,
       place: det.place,
-      country: det.country,
+      country: countryRef.current,
       location,
     });
   };

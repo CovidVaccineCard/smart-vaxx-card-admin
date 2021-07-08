@@ -16,10 +16,9 @@ function CenterModal(props: IModalProps) {
     id: string;
     name: string;
     place: string;
-    country: string;
     latitude?: string;
     longitude?: string;
-  }>({ id: "", name: "", place: "", country: "" });
+  }>({ id: "", name: "", place: "" });
   const [validated, setValidated] = useState(false);
 
   useEffect(() => {
@@ -27,7 +26,6 @@ function CenterModal(props: IModalProps) {
       id: centerData.id,
       name: centerData.name,
       place: centerData.place,
-      country: centerData.country,
       latitude: `${centerData.location?.latitude ?? ""}` || undefined,
       longitude: `${centerData.location?.longitude ?? ""}` || undefined,
     });
@@ -37,7 +35,6 @@ function CenterModal(props: IModalProps) {
     setValidated(
       center.name !== "" &&
         center.place !== "" &&
-        center.country !== "" &&
         !!center.latitude &&
         !!center.longitude
     );
@@ -48,7 +45,6 @@ function CenterModal(props: IModalProps) {
       id: "",
       name: "",
       place: "",
-      country: "",
     });
     closeHandler();
   };
@@ -59,7 +55,6 @@ function CenterModal(props: IModalProps) {
         id: center.id,
         name: center.name,
         place: center.place,
-        country: center.country,
         location: new firebase.firestore.GeoPoint(
           +center.latitude,
           +center.longitude
@@ -70,7 +65,6 @@ function CenterModal(props: IModalProps) {
       name: "",
       place: "",
       id: "",
-      country: "",
     });
     closeHandler();
   };
@@ -79,8 +73,6 @@ function CenterModal(props: IModalProps) {
     setCenter({ ...center, name: e.target.value });
   const placeHandler = (e: any) =>
     setCenter({ ...center, place: e.target.value });
-  const countryHandler = (e: any) =>
-    setCenter({ ...center, country: e.target.value });
   const latitudeHandler = (e: any) =>
     setCenter({ ...center, latitude: e.target.value });
   const longitudeHandler = (e: any) =>
@@ -101,13 +93,6 @@ function CenterModal(props: IModalProps) {
           label="Place"
           value={center.place}
           onChange={placeHandler}
-          variant="outlined"
-          size="small"
-        />
-        <TextField
-          label="Country Code"
-          value={center.country}
-          onChange={countryHandler}
           variant="outlined"
           size="small"
         />

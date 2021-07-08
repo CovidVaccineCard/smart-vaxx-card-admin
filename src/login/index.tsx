@@ -82,29 +82,3 @@ function Login(props: any) {
 }
 
 export default withRouter(Login);
-/*
-<Styles.Wrapper>
-      <TextField
-        value={emailId}
-        onChange={emailIdHandler}
-        label="Email Id"
-        type="text"
-        spellCheck={false}
-      />
-      <TextField
-        value={password}
-        onChange={passwordHandler}
-        label="Password"
-        type="password"
-        spellCheck={false}
-      />
-      <Button
-        variant="contained"
-        color="secondary"
-        disabled={!validated}
-        onClick={loginHandler}
-      >
-        LOGIN
-      </Button>
-    </Styles.Wrapper>
-*/

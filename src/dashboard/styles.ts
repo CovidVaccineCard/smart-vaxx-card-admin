@@ -60,8 +60,8 @@ export const useStyles = makeStyles({
     border: "2px solid #000",
     padding: "2px",
     width: "300px",
-    height: "350px",
-    justifyContent: "space-around",
+    height: "400px",
+    justifyContent: "space-evenly",
   },
   button: {
     height: 70,

@@ -7,12 +7,14 @@ export interface IModalProps {
     id: string;
     name: string;
     place: string;
+    country: string;
     location: firebase.firestore.GeoPoint | null;
   };
   centerHandler: (obj: {
     id: string;
     name: string;
     place: string;
+    country: string;
     location: firebase.firestore.GeoPoint;
   }) => void;
   closeHandler: () => void;

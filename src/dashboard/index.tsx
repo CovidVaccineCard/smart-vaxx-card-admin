@@ -21,6 +21,7 @@ function Dashboard(props: any) {
     id: "",
     name: "",
     place: "",
+    country: "",
     location: null,
   });
   const [add, setAdd] = useState(false);
@@ -58,6 +59,7 @@ function Dashboard(props: any) {
       id: "",
       name: "",
       place: "",
+      country: "",
       location: null,
     });
   };
@@ -69,6 +71,7 @@ function Dashboard(props: any) {
       id: docRef.id,
       name: det.name,
       place: det.place,
+      country: det.country,
       location,
     });
   };
@@ -79,6 +82,7 @@ function Dashboard(props: any) {
       id: docRef.id,
       name: det.name,
       place: det.place,
+      country: det.country,
       location,
     });
   };
@@ -145,7 +149,3 @@ function Dashboard(props: any) {
 }
 
 export default withRouter(Dashboard);
-/* 
-setCenter(c);
-                    setEdit(true);
-*/
